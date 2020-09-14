@@ -1,2 +1,2 @@
-# gielda_backend_java
+# Forex practice application
 Forex application
