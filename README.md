@@ -1,2 +1,2 @@
-# Forex practice application
-Forex application
+# StockAssistantApp practice application
+Application to help manage Stock Exchange

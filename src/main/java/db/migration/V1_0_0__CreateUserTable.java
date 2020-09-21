@@ -19,7 +19,7 @@ public class V1_0_0__CreateUserTable extends BaseJavaMigration {
                 + "last_name VARCHAR(50),\n"
                 + "password VARCHAR,\n"
                 + "role VARCHAR(15),\n"
-                + "account_number VARCHAR\n"
+                + "wallet_number VARCHAR\n"
                 + ");"
         );
     }

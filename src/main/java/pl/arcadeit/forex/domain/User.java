@@ -42,6 +42,7 @@ public class User {
     @Column(name = "role")
     private UserRole role;
 
-    @Column(name = "account_number")
-    private String accountNumber;
+    @Column(name = "wallet_number")
+    private String walletNumber;
+
 }
