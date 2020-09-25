@@ -29,11 +29,11 @@ public class UserController {
         this.converter = converter;
     }
 
-    @GetMapping
-    public UserModel getUserDetails(final Principal principal) {
-        System.out.println(principal.getName());
-        return convertToModel(userService.getUserByEmail(principal.getName()));
-    }
+//    @GetMapping
+//    public UserModel getUserDetails(final Principal principal) {
+//        System.out.println(principal.getName());
+//        return convertToModel(userService.getUserByEmail(principal.getName()));
+//    }
 
     private UserModel convertToModel(final User user) {
         return userDTO.userToUserModel(user);
@@ -49,7 +49,7 @@ public class UserController {
         return userService.createNewUser(converter.convertToUser(user));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/login")
     public UserModel logIn(@Valid @RequestBody final LoginForm loginForm) {
         return convertToModel(userService.logIn(loginForm));

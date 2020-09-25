@@ -8,8 +8,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: St0Ck4Ss!sT
       MYSQL_DATABASE: StockAssistantDB
-    ports:
-    - 3306:3306
 
   adminer:
     image: adminer
@@ -20,8 +18,6 @@ services:
   mongo:
     build: ./MongoDBDockerFile
     restart: always
-    ports:
-    - 27017:27017
 
   mongo-express:
     image: mongo-express
@@ -31,3 +27,15 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: stockassist
+
+  wait-for-it:
+    image: willwill/wait-for-it
+    entrypoint: "./wait-for-it.sh -t 300 sqldb:3306 --strict"
+
+  stock_assistant_api:
+    build: .
+    ports:
+    - 443:443
+    depends_on:
+      - sqldb
+    restart: on-failure
