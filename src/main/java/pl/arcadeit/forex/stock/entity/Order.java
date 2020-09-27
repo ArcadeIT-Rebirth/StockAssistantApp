@@ -1,8 +1,17 @@
 package pl.arcadeit.forex.stock.entity;
 
+/*
+Not in use atm
+ */
+
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter @Setter
 public class Order {
+
     private Stock stock;
     private int quantity;
     private double price;
@@ -15,35 +24,5 @@ public class Order {
         this.expiration = expiration;
     }
 
-    public Stock getStock() {
-        return stock;
-    }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Date getExpiration() {
-        return expiration;
-    }
-
-    public void setExpiration(Date expiration) {
-        this.expiration = expiration;
-    }
 }

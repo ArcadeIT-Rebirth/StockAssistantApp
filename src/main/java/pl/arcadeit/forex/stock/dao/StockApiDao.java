@@ -10,9 +10,6 @@ import org.springframework.web.client.RestTemplate;
 import pl.arcadeit.forex.stock.entity.Price;
 import pl.arcadeit.forex.stock.entity.Stock;
 
-import javax.persistence.EntityManager;
-
-
 @Repository
 public class StockApiDao implements StockDao {
 
