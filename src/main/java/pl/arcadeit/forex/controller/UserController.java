@@ -14,6 +14,7 @@ import java.security.Principal;
     If userDTO is highlighted - build project. Mapstruct instance must be available in target dir.
  */
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
