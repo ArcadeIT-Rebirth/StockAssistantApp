@@ -39,7 +39,11 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent context) {
-        userService.createNewUser(ADMIN_USER);
-        userService.createNewUser(NORMAL_USER);
+        if (!userService.isUserPresent(ADMIN_USER.getEmail())) {
+            userService.createNewUser(ADMIN_USER);
+        }
+        if (!userService.isUserPresent(NORMAL_USER.getEmail())) {
+            userService.createNewUser(NORMAL_USER);
+        }
     }
 }

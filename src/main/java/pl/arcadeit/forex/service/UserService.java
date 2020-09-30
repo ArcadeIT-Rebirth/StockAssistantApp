@@ -33,6 +33,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public boolean isUserPresent(final String email) {
+        return userRepository.findById(email).isPresent();
+    }
+
     private void isUserExisting(final String userEmail) {
         if (userRepository.findById(userEmail).isPresent()) {
             throw new UserException(String.format("User with email %s already exists", userEmail));
