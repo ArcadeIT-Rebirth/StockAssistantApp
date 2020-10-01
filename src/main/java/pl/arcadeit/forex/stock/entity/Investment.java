@@ -10,21 +10,13 @@ public class Investment {
     private int quantity;
     private double buyPrice;
 
+    public Investment() {
+    }
+
     public Investment(Stock stock, int quantity, double buyPrice) {
         this.stock = stock;
         this.quantity = quantity;
         this.buyPrice = buyPrice;
-    }
-
-    public void buyMore(int additionalQuantity, double additionalBuyPrice) {
-        double price = (quantity * buyPrice) + (additionalQuantity * additionalBuyPrice)
-                / (quantity + additionalQuantity);
-        buyPrice = price;
-        quantity = quantity + additionalQuantity;
-    }
-
-    public void sellSome(int soldQuantity) {
-        quantity -= soldQuantity;
     }
 
     @Override
