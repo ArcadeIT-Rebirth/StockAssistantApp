@@ -66,8 +66,12 @@ public class UserService {
         if (!user.getEmail().equals(email)) {
             throw new UserException("Email and user email aren't equal.");
         }
-        isUserExisting(email);
+        isUserNonExisting(email);
         editFields(user);
+    }
+
+    private void isUserNonExisting(final String email) {
+        userRepository.findById(email).orElseThrow(() -> new UserException(String.format("User with %s does not exist", email)));
     }
 
     private void editFields(final User editFields) {
