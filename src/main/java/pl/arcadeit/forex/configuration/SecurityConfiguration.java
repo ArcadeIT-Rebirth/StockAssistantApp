@@ -21,7 +21,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/h2").hasRole("ADMIN")
-                .antMatchers("/api/user/register", "/api/user/login", "/api/user/login-form").permitAll()
+                .antMatchers("/api/user/register", "/api/user/login", "/api/user/login-form", "/stock/**").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
                 .formLogin().successForwardUrl("/h2").failureForwardUrl("/api/user")
