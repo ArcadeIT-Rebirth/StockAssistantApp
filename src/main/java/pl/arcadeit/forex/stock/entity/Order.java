@@ -6,10 +6,12 @@ Not in use atm
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
 @Getter @Setter
+@Transactional
 public class Order {
 
     private Stock stock;

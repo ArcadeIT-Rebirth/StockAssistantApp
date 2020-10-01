@@ -4,16 +4,28 @@ package pl.arcadeit.forex.stock.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 @Getter @Setter
+@Transactional
 public class Stock {
 
     private String ticker;
-    private Price price;
+    private ArrayList<Price> price;
+    private ArrayList<StooqPrice> prices;
+
+
+    public Stock(String ticker, ArrayList<StooqPrice> prices) {
+        this.ticker = ticker;
+        this.prices = prices;
+    }
 
     public Stock(String ticker, Price price) {
         this.ticker = ticker;
-        this.price = price;
+        this.price = new ArrayList<>();
+        this.price.add(price);
     }
 
     public Stock(String ticker) {

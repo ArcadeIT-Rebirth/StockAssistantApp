@@ -2,8 +2,10 @@ package pl.arcadeit.forex.stock.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
 
 @Getter @Setter
+@Transactional
 public class Investment {
 
     private Stock stock;

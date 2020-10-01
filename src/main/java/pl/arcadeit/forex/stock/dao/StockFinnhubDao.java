@@ -7,17 +7,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-import pl.arcadeit.forex.stock.entity.Price;
+import pl.arcadeit.forex.stock.entity.FinnhubPrice;
 import pl.arcadeit.forex.stock.entity.Stock;
 
 @Repository
-public class StockApiDao implements StockDao {
+public class StockFinnhubDao implements StockDao {
 
     @Autowired
-    public StockApiDao() {
+    public StockFinnhubDao() {
     }
 
-    public Price callGetPrice(String ticker) {
+    public FinnhubPrice callGetPrice(String ticker) {
 
         //creating REST template
         RestTemplate rest = new RestTemplate();
@@ -35,7 +35,7 @@ public class StockApiDao implements StockDao {
 
         try {
             //creating and returning Price POJO of asked stock
-            return new ObjectMapper().readValue(exchange.getBody(),Price.class);
+            return new ObjectMapper().readValue(exchange.getBody(),FinnhubPrice.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
