@@ -28,12 +28,12 @@ public class UserService {
     }
 
     public User createNewUser(final User user) {
-        isUserExisting(user.getEmail());
+        isUserNonExisting(user.getEmail());
         encodePassword(user);
         return userRepository.save(user);
     }
 
-    private void isUserExisting(final String userEmail) {
+    private void isUserNonExisting(final String userEmail) {
         if (userRepository.findById(userEmail).isPresent()) {
             throw new UserException(String.format("User with email %s already exists", userEmail));
         }
@@ -66,11 +66,11 @@ public class UserService {
         if (!user.getEmail().equals(email)) {
             throw new UserException("Email and user email aren't equal.");
         }
-        isUserNonExisting(email);
+        isUserExisting(email);
         editFields(user);
     }
 
-    private void isUserNonExisting(final String email) {
+    private void isUserExisting(final String email) {
         userRepository.findById(email).orElseThrow(() -> new UserException(String.format("User with %s does not exist", email)));
     }
 
