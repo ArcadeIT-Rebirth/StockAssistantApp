@@ -3,6 +3,7 @@ package pl.arcadeit.forex.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.arcadeit.forex.domain.User;
+import pl.arcadeit.forex.domain.UserRole;
 import pl.arcadeit.forex.exception.UserException;
 import pl.arcadeit.forex.model.LoginForm;
 import pl.arcadeit.forex.repository.UserRepository;
@@ -30,6 +31,7 @@ public class UserService {
     public User createNewUser(final User user) {
         isUserExisting(user.getEmail());
         encodePassword(user);
+        user.setRole(UserRole.USER);
         return userRepository.save(user);
     }
 
