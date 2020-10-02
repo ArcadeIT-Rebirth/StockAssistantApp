@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PatchMapping("/{email}")
-    public void updateData(@PathVariable final String email, @RequestBody final UserModel userModel) {
+    public void updateData(@PathVariable final String email, @RequestBody @Valid final UserModel userModel) {
         userService.update(email, userDTO.userModelToUser(userModel));
     }
 }

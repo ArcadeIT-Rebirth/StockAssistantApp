@@ -13,11 +13,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class UserModel {
 
-    @NotNull(message = "first name is required")
     @Length(min = 2, max = 25, message = "first name should contain between 2 and 50 characters")
     private String firstName;
 
-    @NotNull(message = "last name is required")
     @Length(min = 2, max = 50, message = "last name should contain between 2 and 50 characters")
     private String lastName;
 
