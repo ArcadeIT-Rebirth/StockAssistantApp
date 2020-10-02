@@ -52,6 +52,8 @@ class UserServiceTest {
     private static final String WRONG_EMAIL_DATA = "wrong.mail@ait.pl";
     private static final LoginForm LOGIN_FORM_TEST_DATA = LoginForm.builder().email(JANE_DOE_MAIL)
             .password(PASSWORD).build();
+    private static final User REGISTER_USER_TEST_DATA = User.builder().firstName(JOHN).lastName(SMITH)
+            .email(JANE_DOE_MAIL).password(PASSWORD).build();
 
     // endregion
 
@@ -98,6 +100,21 @@ class UserServiceTest {
         assertThat(actualResult)
                 .isNotNull()
                 .isEqualTo(USER_TEST_DATA_1);
+    }
+
+    @Test
+    void shouldCreateNewUser() {
+        // given
+        when(userRepository.save(any(User.class))).thenReturn(EDITED_USER_TEST_DATA_1);
+        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        // when
+        final User actualResult = userService.createNewUser(REGISTER_USER_TEST_DATA);
+
+        // then
+        assertThat(actualResult)
+                .isNotNull()
+                .isEqualTo(EDITED_USER_TEST_DATA_1);
     }
 
     // endregion
@@ -174,6 +191,23 @@ class UserServiceTest {
                 .isNotNull()
                 .isInstanceOf(UserException.class)
                 .hasMessageContaining("Incorrect email or password");
+    }
+
+    @Test
+    void shouldThrowUserExceptionWhenUserAlreadyExists() {
+        // given
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(USER_TEST_DATA_1));
+
+        // when
+        final Exception actualResult = Assertions.assertThrows(
+                UserException.class,
+                () -> userService.createNewUser(USER_TEST_DATA_1));
+
+        // then
+        assertThat(actualResult)
+                .isNotNull()
+                .isInstanceOf(UserException.class)
+                .hasMessageContaining("already exists");
     }
 
     // end region
