@@ -1,4 +1,4 @@
-package pl.arcadeit.forex.service;
+package pl.arcadeit.forex.service.stock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +10,9 @@ import pl.arcadeit.forex.model.stock.QuoteDTO;
 import pl.arcadeit.forex.repository.QuoteRepository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StockService {
@@ -53,7 +54,7 @@ public class StockService {
     }
 
     public List<Quote> getAllSavedQuotes() {
-        return quoteRepository.findAll();
+        return Stream.of(quoteRepository.findAll()).map(q -> (Quote) q).collect(Collectors.toList());
     }
 
     private String getQuoteSourceUrl(String symbol, String token) {

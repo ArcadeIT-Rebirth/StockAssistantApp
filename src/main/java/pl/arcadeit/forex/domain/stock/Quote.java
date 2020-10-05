@@ -32,7 +32,7 @@ public class Quote {
     @Column(name = "close_price")
     private float closePrice;
 
-    @Column(name = "hight_price")
+    @Column(name = "high_price")
     private float highPrice;
 
     @Column(name = "low_price")
