@@ -44,7 +44,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @NotBlank(message = "{role.required}")
+    @NotNull(message = "{role.required}")
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private UserRole role;
