@@ -8,6 +8,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /*
     User class contains all necessary fields and some constraints.
@@ -22,22 +24,27 @@ import javax.validation.constraints.Email;
 public class User {
 
     @Id
-    @Email(message = "Email address is invalid.")
+    @NotBlank(message = "{email.required}")
+    @Email(message = "{email.invalid}")
     @Column(name = "email")
     private String email;
 
-    @Length(max = 25, message = "First name should contain up to 25 characters.")
+    @NotBlank(message = "{first.name.required}")
+    @Length(min = 2, max = 25, message = "{first.name.invalid}")
     @Column(name = "first_name")
     private String firstName;
 
-    @Length(min = 2, max = 50, message = "Last name should contain 2 to 50 characters.")
+    @NotBlank(message = "{last.name.required}")
+    @Length(min = 2, max = 50, message = "{last.name.invalid}")
     @Column(name = "last_name")
     private String lastName;
 
-    @Length(min = 8, message = "Password should contain at least 8 characters.")
+    @NotBlank(message = "{password.required}")
+    @Length(min = 8, max = 64, message = "{password.invalid}")
     @Column(name = "password")
     private String password;
 
+    @NotBlank(message = "{role.required}")
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private UserRole role;

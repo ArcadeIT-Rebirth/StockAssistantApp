@@ -7,14 +7,18 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class LoginForm {
-    @Email
+
+    @NotBlank(message = "{email.required}")
+    @Email(message = "{email.invalid}")
     private String email;
-    @Length(min = 8)
+    @NotBlank(message = "{password.required}")
+    @Length(min = 8, max = 64, message = "{login.password.invalid}")
     private String password;
 }
