@@ -14,12 +14,12 @@ public class V1_0_0__CreateUserTable extends BaseJavaMigration {
     public void migrate(final Context context) throws Exception {
         final JdbcTemplate template = new JdbcTemplate(context.getConnection());
         template.execute("CREATE TABLE users (\n"
-                + "email VARCHAR(25) primary key,\n"
+                + "email VARCHAR(50) primary key,\n"
                 + "first_name VARCHAR(25),\n"
                 + "last_name VARCHAR(50),\n"
-                + "password VARCHAR,\n"
-                + "role VARCHAR(15),\n"
-                + "wallet_number VARCHAR\n"
+                + "password VARCHAR(64),\n"
+                + "user_role VARCHAR(15),\n"
+                + "wallet_number VARCHAR(16)\n"
                 + ");"
         );
     }

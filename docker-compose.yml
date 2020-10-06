@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  sqldb:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: St0Ck4Ss!sT
+      MYSQL_DATABASE: StockAssistantDB
+    ports:
+    - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+    - 8083:8080
+
+  mongo:
+    build: ./MongoDBDockerFile
+    restart: always
+    ports:
+    - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+    - 27018:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: stockassist

@@ -22,7 +22,7 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
             .lastName("Admin")
             .password("$uP3r4Dm!N")
             .role(UserRole.ADMIN)
-            .walletNumber("111111111111111")
+            .walletNumber("1111111111111111")
             .build();
     private static final User NORMAL_USER = User.builder()
             .email("user@ait.pl")
@@ -30,7 +30,7 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
             .lastName("User")
             .password("N0rM@lU$3r")
             .role(UserRole.USER)
-            .walletNumber("5486321843215484521")
+            .walletNumber("5486321843215484")
             .build();
 
     public InitializeUser(final UserService userService) {
@@ -39,7 +39,11 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent context) {
-        userService.createNewUser(ADMIN_USER);
-        userService.createNewUser(NORMAL_USER);
+        if (!userService.isUserPresent(ADMIN_USER.getEmail())) {
+            userService.createNewUser(ADMIN_USER);
+        }
+        if (!userService.isUserPresent(NORMAL_USER.getEmail())) {
+            userService.createNewUser(NORMAL_USER);
+        }
     }
 }
