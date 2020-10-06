@@ -6,21 +6,21 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserModel {
 
-    @Length(min = 2, max = 25, message = "first name should contain between 2 and 50 characters")
+    @Length(min = 2, max = 25, message = "{first.name.invalid}")
     private String firstName;
 
-    @Length(min = 2, max = 50, message = "last name should contain between 2 and 50 characters")
+    @Length(min = 2, max = 50, message = "{last.name.invalid}")
     private String lastName;
 
-    @NotNull(message = "email is required")
-    @Email(message = "email format is invalid")
+    @NotBlank(message = "{email.required}")
+    @Email(message = "{email.invalid}")
     private String email;
 
 }

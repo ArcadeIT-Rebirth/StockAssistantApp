@@ -10,20 +10,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import pl.arcadeit.forex.controller.UserController;
 import pl.arcadeit.forex.model.ErrorMessage;
 
+import javax.annotation.Priority;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Priority(1)
 @RestControllerAdvice(assignableTypes = UserController.class)
 public class UserExceptionHandler {
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(Exception.class)
-    public ErrorMessage handleGlobalException(final Exception exception) {
-        return ErrorMessage.builder()
-                .message("Something went wrong")
-                .details(List.of(exception.getClass().toGenericString()))
-                .build();
-    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
