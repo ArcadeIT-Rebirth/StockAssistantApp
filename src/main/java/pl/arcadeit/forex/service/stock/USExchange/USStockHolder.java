@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.arcadeit.forex.exception.stock.ExchangeException;
 import pl.arcadeit.forex.model.stock.StockDTO;
-import pl.arcadeit.forex.service.stock.Stock;
+import pl.arcadeit.forex.service.stock.StockHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class USStock implements Stock {
+public class USStockHolder implements StockHolder {
 
     @Value("${finnhub.token}")
     private String token;
