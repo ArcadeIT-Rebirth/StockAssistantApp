@@ -2,50 +2,26 @@ package pl.arcadeit.forex.service.stock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.arcadeit.forex.domain.stock.Exchange;
-import pl.arcadeit.forex.exception.stock.ExchangeCodeException;
-import pl.arcadeit.forex.repository.ExchangeRepository;
+import pl.arcadeit.forex.model.stock.QuoteDTO;
 
-import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class ExchangeService {
 
-    ExchangeRepository exchangeRepository;
+    ExchangeFacade exchangeFacade;
+    ExchangeFacadeLocator exchangeFacadeLocator;
 
-    @Autowired
-    public void setExchangeRepository(ExchangeRepository exchangeRepository) {
-        this.exchangeRepository = exchangeRepository;
+    public ExchangeService(@Autowired ExchangeFacade exchangeFacade, @Autowired ExchangeFacadeLocator exchangeFacadeLocator) {
+        this.exchangeFacade = exchangeFacade;
+        this.exchangeFacadeLocator = exchangeFacadeLocator;
     }
 
-    public Exchange saveOrUpdateExchange(Exchange exchange) {
-        try {
-            exchange.setCode(exchange.getCode().toUpperCase());
-            return exchangeRepository.save(exchange);
-        } catch (Exception e) {
-            throw new ExchangeCodeException("Exchange CODE ;" + exchange.getCode() + "'already exist.");
-        }
-    }
+    public List<QuoteDTO> getTodayQuotesForExchange(String exchangeSymbol) {
+        ExchangeFacade exchangeFacade = exchangeFacadeLocator.getExchangeFacadeBySymbol(
+                ExchangeSymbol.valueOf(exchangeSymbol).getClassImpl()
+            );
 
-    public void deleteExchangeByCode(String code) {
-        Optional<Exchange> exchange = exchangeRepository.findById(code);
-
-        if (exchange.isEmpty())
-            throw new ExchangeCodeException("Cannot delete exchange with CODE '" + code + "' this exchange doesn't exist.");
-
-        exchangeRepository.delete(exchange.get());
-    }
-
-    public Exchange findExchangeByCode(String code) {
-        Optional<Exchange> exchange = exchangeRepository.findById(code);
-        if (exchange.isEmpty())
-            throw new ExchangeCodeException("Exchange CODE '" + code + "' doesn't exist.");
-
-        return exchange.get();
-    }
-
-    public Iterable<Exchange> findAllExchanges() {
-        return exchangeRepository.findAll();
+        return exchangeFacade.getRealTimeQuotes();
     }
 }
