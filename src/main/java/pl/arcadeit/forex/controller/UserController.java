@@ -29,20 +29,15 @@ public class UserController {
         this.converter = converter;
     }
 
-    @GetMapping
-    public UserModel getUserDetails(final Principal principal) {
-        System.out.println(principal.getName());
-        return convertToModel(userService.getUserByEmail(principal.getName()));
-    }
-
-    private UserModel convertToModel(final User user) {
-        return userDTO.userToUserModel(user);
-    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     public UserModel registerNewUser(@RequestBody @Valid final RegisterForm user) {
         return convertToModel(createUser(user));
+    }
+
+    private UserModel convertToModel(final User user) {
+        return userDTO.userToUserModel(user);
     }
 
     private User createUser(final RegisterForm user) {

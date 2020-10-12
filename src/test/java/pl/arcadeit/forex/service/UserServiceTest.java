@@ -8,6 +8,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.verification.VerificationMode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.arcadeit.forex.domain.User;
 import pl.arcadeit.forex.domain.UserRole;
@@ -58,6 +59,8 @@ class UserServiceTest {
     // endregion
 
     //TODO: createUser tests
+    //TODO: poprawic nazwy w happy path shouldWHATwhenDATA
+    //TODO: verify ilosciowy
 
     // region Happy path
 

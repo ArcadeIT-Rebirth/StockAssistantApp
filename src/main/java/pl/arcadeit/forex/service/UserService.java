@@ -1,5 +1,6 @@
 package pl.arcadeit.forex.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.arcadeit.forex.domain.User;
@@ -16,6 +17,7 @@ import static java.util.Objects.nonNull;
     Service layer to user handling
  */
 
+@Slf4j
 @Service
 @Transactional
 public class UserService {
@@ -28,20 +30,28 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean isUserPresent(final String email) {
-        return userRepository.findById(email).isPresent();
-    }
-
     public User createNewUser(final User user) {
-        isUserNonExisting(user.getEmail());
+        ifUserExist(getUserByEmail(user.getEmail()));
         encodePassword(user);
         user.setRole(UserRole.USER);
+        log.info(String.format("INFO: Created user %s with role %s.", user.getEmail(), user.getRole()));
         return userRepository.save(user);
     }
 
-    private void isUserNonExisting(final String userEmail) {
-        if (userRepository.findById(userEmail).isPresent()) {
-            throw new UserException(String.format("User with email %s already exists", userEmail));
+    public User getUserByEmail(final String email) {        //TODO: change to private when initialization will be removed
+        return userRepository.findById(email)
+                .orElse(null);
+    }
+
+    private void ifUserExist(final User user) {
+        if (nonNull(user)) {
+            throw new UserException(String.format("User with email %s already exists", user.getEmail()));
+        }
+    }
+
+    private void ifNoUserFound(final User user) {
+        if (!nonNull(user)) {
+            throw new UserException("User does not exist");
         }
     }
 
@@ -49,35 +59,32 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
-    public User getUserByEmail(final String email) {
-        return userRepository.findById(email)
-                .orElseThrow(() -> new UserException(String.format("Email address %s is unknown", email)));
+    public User findUserByEmail(final String email) {
+        final User foundUser = getUserByEmail(email);
+        ifNoUserFound(foundUser);
+        return foundUser;
     }
+
 
     public User logIn(final LoginForm loginForm) {
-        final User user = getUserForLogIn(loginForm.getEmail());
-        if (passwordEncoder.matches(loginForm.getPassword(), user.getPassword())) {
-            return user;
-        } else {
-            throw new UserException("Incorrect email or password.");
+        final User foundUser = getUserByEmail(loginForm.getEmail());
+        if (nonNull(foundUser) && passwordEncoder.matches(loginForm.getPassword(), foundUser.getPassword())) {
+            log.info(String.format("INFO: Logged in user %s with role %s.", foundUser.getEmail(), foundUser.getRole()));
+            return foundUser;
         }
-    }
-
-    private User getUserForLogIn(final String email) {
-        return userRepository.findById(email)
-                .orElseThrow(() -> new UserException("Incorrect email or password."));
+        throw new UserException("Incorrect email or password.");
     }
 
     public void update(final String email, final User user) {
-        if (!user.getEmail().equals(email)) {
-            throw new UserException("Email and user email aren't equal.");
-        }
-        isUserExisting(email);
+        isEmailValid(email, user.getEmail());
+        final User foundUser = getUserByEmail(email);
+        ifNoUserFound(foundUser);
         editFields(user);
     }
 
-    private void isUserExisting(final String email) {
-        userRepository.findById(email).orElseThrow(() -> new UserException(String.format("User with %s does not exist", email)));
+    private void isEmailValid(final String email, final String userEmail) {
+        if (!email.equals(userEmail))
+            throw new UserException("Email and user email aren't equal.");
     }
 
     private void editFields(final User editFields) {

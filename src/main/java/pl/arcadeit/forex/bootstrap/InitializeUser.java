@@ -1,16 +1,20 @@
 package pl.arcadeit.forex.bootstrap;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import pl.arcadeit.forex.domain.User;
 import pl.arcadeit.forex.domain.UserRole;
 import pl.arcadeit.forex.service.UserService;
 
+import static java.util.Objects.nonNull;
+
 /*
     Initializing two users.
  */
 
+@Profile("develop")
 @Component
 public class InitializeUser implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -39,10 +43,10 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent context) {
-        if (!userService.isUserPresent(ADMIN_USER.getEmail())) {
+        if (!nonNull(userService.getUserByEmail(ADMIN_USER.getEmail()))) {
             userService.createNewUser(ADMIN_USER);
         }
-        if (!userService.isUserPresent(NORMAL_USER.getEmail())) {
+        if (!nonNull(userService.getUserByEmail(NORMAL_USER.getEmail()))) {
             userService.createNewUser(NORMAL_USER);
         }
     }
