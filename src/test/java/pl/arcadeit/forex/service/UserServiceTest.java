@@ -8,7 +8,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.verification.VerificationMode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.arcadeit.forex.domain.User;
 import pl.arcadeit.forex.domain.UserRole;
@@ -58,26 +57,25 @@ class UserServiceTest {
 
     // endregion
 
-    //TODO: createUser tests
-    //TODO: poprawic nazwy w happy path shouldWHATwhenDATA
-    //TODO: verify ilosciowy
-
     // region Happy path
 
     @Test
-    void shouldReturnUserByEmail() {
+    void shouldReturnUserByEmailWhenUserExistsInDatabase() {
         // given
-        when(userRepository.findById(any(String.class))).thenReturn(Optional.of(USER_TEST_DATA_1));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(USER_TEST_DATA_1));
 
         // when
         final User actualResult = userService.getUserByEmail(USER_TEST_DATA_1.getEmail());
 
         // then
-        assertThat(actualResult).isNotNull().isEqualTo(USER_TEST_DATA_1);
+        verify(userRepository, times(1)).findById(anyString());
+        assertThat(actualResult)
+                .isNotNull()
+                .isEqualTo(USER_TEST_DATA_1);
     }
 
     @Test
-    void shouldUpdateUserFields() {
+    void shouldUpdateUserFieldsWhenProvidedDataIsCorrect() {
         // given
         when(userRepository.findById(USER_TEST_DATA_1.getEmail())).thenReturn(Optional.of(USER_TEST_DATA_1));
 
@@ -87,11 +85,14 @@ class UserServiceTest {
         final User actualResult = captor.getValue();
 
         // then
-        assertThat(actualResult).isNotNull().isEqualTo(EDITED_USER_TEST_DATA_1);
+        verify(userRepository, times(1)).findById(anyString());
+        assertThat(actualResult)
+                .isNotNull()
+                .isEqualTo(EDITED_USER_TEST_DATA_1);
     }
 
     @Test
-    void shouldLogInUser() {
+    void shouldLogInUserWhenCredentialsAreCorrect() {
         // given
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(userRepository.findById(anyString())).thenReturn(Optional.of(USER_TEST_DATA_1));
@@ -100,13 +101,15 @@ class UserServiceTest {
         final User actualResult = userService.logIn(LOGIN_FORM_TEST_DATA);
 
         // then
+        verify(passwordEncoder, times(1)).matches(anyString(), anyString());
+        verify(userRepository, times(1)).findById(anyString());
         assertThat(actualResult)
                 .isNotNull()
                 .isEqualTo(USER_TEST_DATA_1);
     }
 
     @Test
-    void shouldCreateNewUser() {
+    void shouldCreateNewUserWhenGivenDataIsValid() {
         // given
         when(userRepository.save(any(User.class))).thenReturn(EDITED_USER_TEST_DATA_1);
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
@@ -115,6 +118,8 @@ class UserServiceTest {
         final User actualResult = userService.createNewUser(REGISTER_USER_TEST_DATA);
 
         // then
+        verify(userRepository, times(1)).findById(anyString());
+        verify(userRepository, times(1)).save(any(User.class));
         assertThat(actualResult)
                 .isNotNull()
                 .isEqualTo(EDITED_USER_TEST_DATA_1);
@@ -124,29 +129,23 @@ class UserServiceTest {
 
     // region Border path
 
+    @Test
+    void shouldReturnNullWhenUserNotFound() {
+        // given
+        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
+        // when
+        final User actualResult = userService.getUserByEmail(anyString());
+
+        // then
+        verify(userRepository, times(1)).findById(anyString());
+        assertThat(actualResult)
+                .isNull();
+    }
 
     // endregion
 
     // region Unhappy path
-
-    @Test
-    void shouldThrowUserExceptionWhenUserNotFound() {
-        // given
-        when(userRepository.findById(USER_TEST_DATA_1.getEmail())).thenReturn(Optional.empty());
-
-        // when
-        final Exception actualResult = Assertions.assertThrows(
-                UserException.class,
-                () -> userService.getUserByEmail(USER_TEST_DATA_1.getEmail()));
-
-        // then
-        assertThat(actualResult)
-                .isNotNull()
-                .isInstanceOf(UserException.class)
-                .hasMessageContaining("Email address")
-                .hasMessageContaining("is unknown");
-    }
 
     @Test
     void shouldThrowUserExceptionWhenEmailAddressDoesNotMatch() {
@@ -172,6 +171,7 @@ class UserServiceTest {
                 () -> userService.update(USER_TEST_DATA_1.getEmail(), USER_TEST_DATA_1));
 
         // then
+        verify(userRepository, times(1)).findById(anyString());
         assertThat(actualResult)
                 .isNotNull()
                 .isInstanceOf(UserException.class)
@@ -190,6 +190,8 @@ class UserServiceTest {
                 () ->userService.logIn(LOGIN_FORM_TEST_DATA));
 
         // then
+        verify(passwordEncoder, times(1)).matches(anyString(), anyString());
+        verify(userRepository, times(1)).findById(anyString());
         assertThat(actualResult)
                 .isNotNull()
                 .isInstanceOf(UserException.class)
@@ -207,6 +209,7 @@ class UserServiceTest {
                 () -> userService.createNewUser(USER_TEST_DATA_1));
 
         // then
+        verify(userRepository, times(1)).findById(anyString());
         assertThat(actualResult)
                 .isNotNull()
                 .isInstanceOf(UserException.class)
@@ -215,9 +218,4 @@ class UserServiceTest {
 
     // end region
 
-    // region Support methods
-
-
-
-    // endregion
 }

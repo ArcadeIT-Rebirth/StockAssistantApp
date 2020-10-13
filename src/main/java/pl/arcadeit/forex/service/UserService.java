@@ -79,7 +79,7 @@ public class UserService {
         isEmailValid(email, user.getEmail());
         final User foundUser = getUserByEmail(email);
         ifNoUserFound(foundUser);
-        editFields(user);
+        editFields(foundUser, user);
     }
 
     private void isEmailValid(final String email, final String userEmail) {
@@ -87,14 +87,13 @@ public class UserService {
             throw new UserException("Email and user email aren't equal.");
     }
 
-    private void editFields(final User editFields) {
-        final User user = getUserByEmail(editFields.getEmail());
+    private void editFields(final User actualUser, final User editFields) {
         if (nonNull(editFields.getFirstName())) {
-            user.setFirstName(editFields.getFirstName());
+            actualUser.setFirstName(editFields.getFirstName());
         }
         if (nonNull(editFields.getLastName())) {
-            user.setLastName(editFields.getLastName());
+            actualUser.setLastName(editFields.getLastName());
         }
-        userRepository.save(user);
+        userRepository.save(actualUser);
     }
 }
