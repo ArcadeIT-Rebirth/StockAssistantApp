@@ -10,6 +10,7 @@ import pl.arcadeit.forex.model.LoginForm;
 import pl.arcadeit.forex.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 import static java.util.Objects.nonNull;
 
@@ -95,5 +96,14 @@ public class UserService {
             actualUser.setLastName(editFields.getLastName());
         }
         userRepository.save(actualUser);
+    }
+
+    public void changeUserRole(final User user, final UserRole roleGranted) {
+        user.setRole(roleGranted);
+        userRepository.save(user);
+    }
+
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 }

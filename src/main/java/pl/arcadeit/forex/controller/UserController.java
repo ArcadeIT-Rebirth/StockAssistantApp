@@ -3,11 +3,15 @@ package pl.arcadeit.forex.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.arcadeit.forex.domain.User;
-import pl.arcadeit.forex.model.*;
+import pl.arcadeit.forex.model.RegisterForm;
+import pl.arcadeit.forex.model.RegisterFormConverter;
+import pl.arcadeit.forex.model.UserDTO;
+import pl.arcadeit.forex.model.UserModel;
 import pl.arcadeit.forex.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /*
     User controller.
@@ -44,10 +48,14 @@ public class UserController {
         return userService.createNewUser(converter.convertToUser(user));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/login")
-    public UserModel logIn(@Valid @RequestBody final LoginForm loginForm) {
-        return convertToModel(userService.logIn(loginForm));
+    @GetMapping("/list")
+    public List<User> getUsers() {
+        return userService.getAll();
+    }
+
+    @GetMapping("/get-data")
+    public UserModel getUser(final Principal principal) {
+        return convertToModel(userService.getUserByEmail(principal.getName()));
     }
 
     @PatchMapping("/{email}")

@@ -25,7 +25,6 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
             .firstName("Super")
             .lastName("Admin")
             .password("$uP3r4Dm!N")
-            .role(UserRole.ADMIN)
             .walletNumber("1111111111111111")
             .build();
     private static final User NORMAL_USER = User.builder()
@@ -33,7 +32,6 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
             .firstName("Normal")
             .lastName("User")
             .password("N0rM@lU$3r")
-            .role(UserRole.USER)
             .walletNumber("5486321843215484")
             .build();
 
@@ -45,6 +43,7 @@ public class InitializeUser implements ApplicationListener<ContextRefreshedEvent
     public void onApplicationEvent(final ContextRefreshedEvent context) {
         if (!nonNull(userService.getUserByEmail(ADMIN_USER.getEmail()))) {
             userService.createNewUser(ADMIN_USER);
+            userService.changeUserRole(ADMIN_USER, UserRole.ADMIN);
         }
         if (!nonNull(userService.getUserByEmail(NORMAL_USER.getEmail()))) {
             userService.createNewUser(NORMAL_USER);
