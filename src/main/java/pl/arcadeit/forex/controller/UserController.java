@@ -10,7 +10,6 @@ import pl.arcadeit.forex.model.UserModel;
 import pl.arcadeit.forex.service.UserService;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 /*
@@ -51,11 +50,6 @@ public class UserController {
     @GetMapping("/list")
     public List<User> getUsers() {
         return userService.getAll();
-    }
-
-    @GetMapping("/get-data")
-    public UserModel getUser(final Principal principal) {
-        return convertToModel(userService.getUserByEmail(principal.getName()));
     }
 
     @PatchMapping("/{email}")

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
     User class contains all necessary fields and some constraints.
     Annotations Data, NoArgsConstructor,AllArgsConstructor, Builder are from Lombok plugin.
  */
-//TODO: Builder poza lombokowy
+
 @Entity(name = "users")
 @Data
 @NoArgsConstructor

@@ -16,11 +16,11 @@ import java.io.IOException;
 
 import static pl.arcadeit.forex.configuration.SecurityConstants.*;
 
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+public class JwtVerificationFilter extends BasicAuthenticationFilter {
 
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthorizationFilter(final AuthenticationManager authenticationManager, final UserDetailsService userDetailsService) {
+    public JwtVerificationFilter(final AuthenticationManager authenticationManager, final UserDetailsService userDetailsService) {
         super(authenticationManager);
         this.userDetailsService = userDetailsService;
     }
@@ -42,16 +42,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(final HttpServletRequest request) {
-        String token = request.getHeader(HEADER_STRING);
-        if (token != null) {
-            String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
-                    .build()
-                    .verify(token.replace(TOKEN_PREFIX, ""))
-                    .getSubject();
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, userDetailsService.loadUserByUsername(user).getAuthorities());
-            }
-        }
-        return null;
+        final String token = request.getHeader(HEADER_STRING);
+        final String user = (token == null) ? null : getUsernameFromToken(token);
+        return (user == null) ? null : getUsernamePasswordAuthenticationToken(user);
+    }
+
+    private String getUsernameFromToken(final String token) {
+        return JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                .build()
+                .verify(token.replace(TOKEN_PREFIX, ""))
+                .getSubject();
+    }
+
+    private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(final String user) {
+        return new UsernamePasswordAuthenticationToken(user, null, userDetailsService.loadUserByUsername(user).getAuthorities());
     }
 }

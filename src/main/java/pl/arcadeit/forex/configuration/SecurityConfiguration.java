@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import pl.arcadeit.forex.model.UserDTO;
 
 import static pl.arcadeit.forex.configuration.SecurityConstants.SIGN_UP_URL;
 
@@ -21,11 +22,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final UserDTO userDTO;
 
     public SecurityConfiguration(@Qualifier("customUserDetailsService") final UserDetailsService userDetailsService,
-                                 final PasswordEncoder passwordEncoder) {
+                                 final PasswordEncoder passwordEncoder, final UserDTO userDTO) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.userDTO = userDTO;
     }
 
     @Override
@@ -33,15 +36,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, SIGN_UP_URL, "/api/user/login").permitAll()
                 .antMatchers("/api/user/list").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), userDetailsService))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailsService))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), userDetailsService, userDTO))
+                .addFilter(new JwtVerificationFilter(authenticationManager(), userDetailsService))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .formLogin().loginPage("/api/user/login");
+                .formLogin().disable();
     }
 
     @Override
