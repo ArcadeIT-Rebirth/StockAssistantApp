@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.arcadeit.forex.domain.User;
 import pl.arcadeit.forex.domain.UserRole;
 import pl.arcadeit.forex.exception.UserException;
+import pl.arcadeit.forex.model.ChangePasswordForm;
 import pl.arcadeit.forex.model.LoginForm;
 import pl.arcadeit.forex.repository.UserRepository;
 
@@ -105,5 +106,32 @@ public class UserService {
 
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    public void changePasswordDecorated(final ChangePasswordForm passwordForm, final String username) {
+        log.info("INFO: user " + username + " attempts to change password.");
+        changePassword(passwordForm, username);
+        log.info("INFO: user " + username + " has changed password");
+    }
+
+    private void changePassword(final ChangePasswordForm passwordForm, final String username) {
+        final User user = getUserByEmail(username);
+        ifUserPasswordIsCorrect(user, passwordForm.getCurrentPassword());
+        ifCurrentPasswordIsDifferentFromCurrentPassword(passwordForm);
+        user.setPassword(passwordForm.getNewPassword());
+        encodePassword(user);
+        userRepository.save(user);
+    }
+
+    private void ifUserPasswordIsCorrect(final User user, final String currentPassword) {
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new UserException("Password mismatch, password is invalid.");
+        }
+    }
+
+    private void ifCurrentPasswordIsDifferentFromCurrentPassword(final ChangePasswordForm passwordForm) {
+        if (passwordForm.getCurrentPassword().equals(passwordForm.getNewPassword())) {
+            throw new UserException("Password mismatch, new password must be different from the old password.");
+        }
     }
 }

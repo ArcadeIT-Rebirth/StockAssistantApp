@@ -3,13 +3,11 @@ package pl.arcadeit.forex.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.arcadeit.forex.domain.User;
-import pl.arcadeit.forex.model.RegisterForm;
-import pl.arcadeit.forex.model.RegisterFormConverter;
-import pl.arcadeit.forex.model.UserDTO;
-import pl.arcadeit.forex.model.UserModel;
+import pl.arcadeit.forex.model.*;
 import pl.arcadeit.forex.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 /*
@@ -55,5 +53,15 @@ public class UserController {
     @PatchMapping("/{email}")
     public void updateData(@PathVariable final String email, @RequestBody @Valid final UserModel userModel) {
         userService.update(email, userDTO.userModelToUser(userModel));
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/change-password")
+    public void changePassword(@RequestBody @Valid final ChangePasswordForm passwordForm, final Principal principal) {
+        userService.changePasswordDecorated(passwordForm, extractUsername(principal));
+    }
+
+    private String extractUsername(final Principal principal) {
+        return principal.getName();
     }
 }
