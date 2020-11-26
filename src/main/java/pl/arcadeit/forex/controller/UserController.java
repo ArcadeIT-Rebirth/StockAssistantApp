@@ -50,9 +50,10 @@ public class UserController {
         return userService.getAll();
     }
 
-    @PatchMapping("/{email}")
-    public void updateData(@PathVariable final String email, @RequestBody @Valid final UserModel userModel) {
-        userService.update(email, userDTO.userModelToUser(userModel));
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/change-data")
+    public void updateData(final Principal principal, @RequestBody @Valid final UserModel userModel) {
+        userService.update(extractUsername(principal), userDTO.userModelToUser(userModel));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
