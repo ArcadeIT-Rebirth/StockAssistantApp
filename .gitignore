@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Certs ###
+*.jks
+*.cert
+*.p12
+*.pem
