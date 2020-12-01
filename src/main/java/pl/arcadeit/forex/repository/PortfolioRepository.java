@@ -3,5 +3,9 @@ package pl.arcadeit.forex.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.arcadeit.forex.domain.Portfolio;
 
-public interface PortfolioRepository extends JpaRepository<Portfolio, String> {
+import java.util.List;
+
+public interface PortfolioRepository extends JpaRepository<Portfolio, Integer> {
+
+    public List<Portfolio> findAllByOrderByIdAsc();
 }

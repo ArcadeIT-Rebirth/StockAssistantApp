@@ -9,8 +9,6 @@ public interface AssetService {
 
     public Asset findAssetById(int id);
 
-    public Asset findAssetByName(String name);
-
     public void saveAsset(Asset asset);
 
     public void deleteAssetById(int id);
