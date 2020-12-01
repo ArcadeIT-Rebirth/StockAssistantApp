@@ -22,7 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/h2").hasRole("ADMIN")
                 .antMatchers("/api/user/register", "/api/user/login", "/api/user/login-form").permitAll()
-                .antMatchers("/**").authenticated()
+                .antMatchers("/**").authenticated() //zamienić authenticated na permitAll() do testów
                 .and()
                 .formLogin().successForwardUrl("/h2").failureForwardUrl("/api/user")
                 .and()
