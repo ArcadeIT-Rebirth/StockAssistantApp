@@ -1,6 +1,7 @@
 package pl.arcadeit.forex.service.spring.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.arcadeit.forex.domain.Investment;
 import pl.arcadeit.forex.repository.InvestmentRepository;
 import pl.arcadeit.forex.service.InvestmentService;
@@ -8,6 +9,7 @@ import pl.arcadeit.forex.service.InvestmentService;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class InvestmentServiceSpringData implements InvestmentService {
 
     InvestmentRepository investmentRepository;

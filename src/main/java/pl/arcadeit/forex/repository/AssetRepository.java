@@ -8,4 +8,5 @@ import java.util.List;
 public interface AssetRepository extends JpaRepository<Asset, Integer> {
 
     public List<Asset> findAllByOrderByIdAsc();
+    public Asset findAssetByName(String name);
 }

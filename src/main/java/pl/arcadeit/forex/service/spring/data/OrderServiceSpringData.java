@@ -1,6 +1,7 @@
 package pl.arcadeit.forex.service.spring.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.arcadeit.forex.domain.Order;
 import pl.arcadeit.forex.repository.OrderRepository;
 import pl.arcadeit.forex.service.OrderService;
@@ -8,6 +9,7 @@ import pl.arcadeit.forex.service.OrderService;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class OrderServiceSpringData implements OrderService {
     OrderRepository orderRepository;
 

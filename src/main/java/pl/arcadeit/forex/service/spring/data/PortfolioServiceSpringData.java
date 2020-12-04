@@ -1,6 +1,7 @@
 package pl.arcadeit.forex.service.spring.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.arcadeit.forex.domain.Portfolio;
 import pl.arcadeit.forex.repository.PortfolioRepository;
 import pl.arcadeit.forex.service.PortfolioService;
@@ -8,6 +9,7 @@ import pl.arcadeit.forex.service.PortfolioService;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PortfolioServiceSpringData implements PortfolioService {
 
     PortfolioRepository portfolioRepository;
