@@ -8,7 +8,7 @@ import pl.arcadeit.forex.service.spring.data.PortfolioServiceSpringData;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/portfolio")
 public class PortfolioController {
 
     PortfolioService service;
@@ -17,12 +17,12 @@ public class PortfolioController {
         this.service = service;
     }
 
-    @GetMapping("/portfolios")
+    @GetMapping("/all")
     public List<Portfolio> getAllPortfolios() {
         return service.findAllPortfolios();
     }
 
-    @GetMapping("/portfolios/{portfolioId}")
+    @GetMapping("/id/{portfolioId}")
     public Portfolio getPortfolio(@PathVariable int portfolioId) {
         Portfolio portfolio = service.findPortfolioById(portfolioId);
         if (portfolio == null) {
@@ -31,20 +31,20 @@ public class PortfolioController {
         return portfolio;
     }
 
-    @PostMapping("/portfolios")
+    @PostMapping("/register")
     public Portfolio addPortfolio(@RequestBody Portfolio portfolio) {
         portfolio.setId(0);
         service.savePortfolio(portfolio);
         return portfolio;
     }
 
-    @PutMapping("/portfolios")
+    @PutMapping("/register")
     public Portfolio updatePortfolio(@RequestBody Portfolio portfolio) {
         service.savePortfolio(portfolio);
         return portfolio;
     }
 
-    @DeleteMapping("/portfolios/{portfolioId}")
+    @DeleteMapping("/remove/{portfolioId}")
     public String deletePortfolio(@PathVariable int portfolioId) {
         Portfolio portfolio = service.findPortfolioById(portfolioId);
         if (portfolio == null) {

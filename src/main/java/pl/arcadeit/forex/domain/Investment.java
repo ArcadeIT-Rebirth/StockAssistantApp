@@ -1,7 +1,6 @@
 package pl.arcadeit.forex.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +10,8 @@ import java.time.LocalDate;
 @Entity(name = "investments")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Investment {
 
     @Id
@@ -31,9 +32,4 @@ public class Investment {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    public Investment(Asset asset, int quantity, LocalDate bought) {
-        this.asset = asset;
-        this.quantity = quantity;
-        this.bought = bought;
-    }
 }

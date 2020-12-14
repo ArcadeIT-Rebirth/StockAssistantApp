@@ -1,15 +1,16 @@
 package pl.arcadeit.forex.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Entity(name = "orders")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {

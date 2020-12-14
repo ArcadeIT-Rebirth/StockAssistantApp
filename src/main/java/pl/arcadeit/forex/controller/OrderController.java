@@ -9,7 +9,7 @@ import pl.arcadeit.forex.service.spring.data.OrderServiceSpringData;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/order")
 public class OrderController {
 
     OrderService service;
@@ -19,12 +19,12 @@ public class OrderController {
         this.service = service;
     }
 
-    @GetMapping("/orders")
+    @GetMapping("/all")
     public List<Order> getAllOrders() {
         return service.findAllOrders();
     }
 
-    @GetMapping("/orders/{orderId}")
+    @GetMapping("/id/{orderId}")
     public Order getOrder(@PathVariable int orderId) {
         Order order = service.findOrderById(orderId);
         if (order == null) {
@@ -33,20 +33,20 @@ public class OrderController {
         return order;
     }
 
-    @PostMapping("/orders")
+    @PostMapping("/register")
     public Order addOrder(@RequestBody Order order) {
         order.setId(0);
         service.saveOrder(order);
         return order;
     }
 
-    @PutMapping("/orders")
+    @PutMapping("/register")
     public Order updateOrder(@RequestBody Order order) {
         service.saveOrder(order);
         return order;
     }
 
-    @DeleteMapping("/orders/{orderId}")
+    @DeleteMapping("/remove/{orderId}")
     public String deleteOrder(@PathVariable int orderId) {
         Order order = service.findOrderById(orderId);
         if (order == null) {

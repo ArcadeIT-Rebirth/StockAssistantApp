@@ -16,7 +16,11 @@ public class PortfolioOrderService {
 
     public void placeOrder(Order order) {
         if (validateOrder(order)) {
-            Investment investment = new Investment(order.getAsset(), order.getQuantity(), LocalDate.now());
+            Investment investment = Investment.builder()
+                    .asset(order.getAsset())
+                    .quantity(order.getQuantity())
+                    .bought(LocalDate.now())
+                    .build();
             if (order.isBuy()) {
                 portfolio.addInvestment(investment);
             } else {

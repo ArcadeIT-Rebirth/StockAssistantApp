@@ -9,7 +9,7 @@ import pl.arcadeit.forex.service.spring.data.AssetServiceSpringData;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/asset")
 public class AssetController {
 
     AssetService service;
@@ -19,12 +19,12 @@ public class AssetController {
         this.service = service;
     }
 
-    @GetMapping("/assets")
+    @GetMapping("/all")
     public List<Asset> getAllAssets(){
         return service.findAllAssets();
     }
 
-    @GetMapping("/assets/id/{assetId}")
+    @GetMapping("/id/{assetId}")
     public Asset getAsset(@PathVariable int assetId) {
         Asset asset = service.findAssetById(assetId);
         if (asset == null) {
@@ -33,31 +33,32 @@ public class AssetController {
         return asset;
     }
 
-    @GetMapping("/assets/name/{assetName}")
+    @GetMapping("/name/{assetName}")
     public Asset getAsset(@PathVariable String assetName) {
         return  service.findAssetByName(assetName);
     }
 
-    @PostMapping("/assets")
+    @PostMapping("/register")
     public Asset addAsset(@RequestBody Asset asset) {
         asset.setId(0);
         service.saveAsset(asset);
         return asset;
     }
 
-    @PutMapping("/assets")
+    @PutMapping("/register")
     public Asset updateAsset(@RequestBody Asset asset) {
         service.saveAsset(asset);
         return asset;
     }
 
-    @DeleteMapping("/asset/{assetId}")
-    public String deleteAsset(@PathVariable int asseetId) {
-        Asset asset = service.findAssetById(asseetId);
+    @DeleteMapping("/remove/{assetId}")
+    public String deleteAsset(@PathVariable int assetId) {
+        Asset asset = service.findAssetById(assetId);
         if (asset == null) {
             throw new RuntimeException("No such Id in database");
         }
-        service.deleteAssetById(asseetId);
+        service.deleteAssetById(assetId);
+
         return "Asset successfully deleted";
     }
 
